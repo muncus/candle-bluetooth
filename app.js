@@ -45,6 +45,10 @@ function changeColor() {
   }
 }
 
+document.querySelector('#timerSelect').addEventListener('change', event => {
+  playbulbCandle.setSleepTimer(event.target.value);
+});
+
 document.querySelector('#deviceName').addEventListener('input', event => {
   playbulbCandle.setDeviceName(event.target.value)
   .then(() => {

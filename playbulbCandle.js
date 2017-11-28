@@ -9,6 +9,7 @@
   const CANDLE_DEVICE_NAME_UUID = 0xFFFF;
   const CANDLE_COLOR_UUID = 0xFFFC;
   const CANDLE_EFFECT_UUID = 0xFFFB;
+  const CANDLE_TIMER_UUID = 0xFFFA;
 
   class PlaybulbCandle {
     constructor() {
@@ -120,6 +121,12 @@
         this._isEffectSet = true;
         return [r,g,b];
       });
+    }
+    setSleepTimer(seconds){
+      return this.device.gatt.getPrimaryService(CANDLE_SERVICE_UUID)
+      .then(service => service.getCharacteristic(CANDLE_TIMER_UUID))
+      .then(characteristic => characteristic.writeValue(seconds))
+      .then(_ => seconds);
     }
   }
 

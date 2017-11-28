@@ -125,7 +125,10 @@
     setSleepTimer(seconds){
       return this.device.gatt.getPrimaryService(CANDLE_SERVICE_UUID)
       .then(service => service.getCharacteristic(CANDLE_TIMER_UUID))
-      .then(characteristic => characteristic.writeValue(seconds))
+      .then(characteristic => {
+        let encoder = new TextEncoder('utf-8');
+        characteristic.writeValue(encoder.encode(seconds));
+      })
       .then(_ => seconds);
     }
   }

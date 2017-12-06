@@ -126,10 +126,27 @@
       return this.device.gatt.getPrimaryService(CANDLE_SERVICE_UUID)
       .then(service => service.getCharacteristic(CANDLE_TIMER_UUID))
       .then(characteristic => {
-        let encoder = new TextEncoder('utf-8');
-        characteristic.writeValue(encoder.encode(seconds));
+        characteristic.writeValue(Uint16Array.of(seconds));
       })
       .then(_ => seconds);
+    }
+    getSleepTimer(){
+      return this.device.gatt.getPrimaryService(CANDLE_SERVICE_UUID)
+      .then(service => service.getCharacteristic(CANDLE_TIMER_UUID))
+      .then(characteristic => characteristic.readValue())
+      .then(dataview => {
+        return dataview.getUint16(0);
+      });
+    }
+
+    addSleepTimerEventHandler(fn){
+      return this.device.gatt.getPrimaryService(CANDLE_SERVICE_UUID)
+      .then(service => service.getCharacteristic(CANDLE_TIMER_UUID))
+      .then(characteristic => {
+          console.log("Activating characteristic listener!");
+          characteristic.addEventListener('characteristicvaluechanged', fn);
+          characteristic.startNotifications();
+      });
     }
   }
 

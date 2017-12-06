@@ -6,8 +6,9 @@ document.querySelector('#connect').addEventListener('click', event => {
     document.querySelector('#state').classList.remove('connecting');
     document.querySelector('#state').classList.add('connected');
     return playbulbCandle.getDeviceName().then(handleDeviceName)
-    .then(() => playbulbCandle.getBatteryLevel().then(handleBatteryLevel));
   })
+  // .then(() => playbulbCandle.getBatteryLevel().then(handleBatteryLevel))
+  .then(() => playbulbCandle.addSleepTimerEventHandler(handleSleepTimerChanged))
   .catch(error => {
     console.error('Argh!', error);
   });
@@ -19,6 +20,11 @@ function handleDeviceName(deviceName) {
 
 function handleBatteryLevel(batteryLevel) {
   document.querySelector('#batteryLevel').textContent = batteryLevel + '%';
+}
+
+function handleSleepTimerChanged(event) {
+  console.log("Setting slider to: " + event.target.value.getUint16(0));
+  document.querySelector('#timerSlider').value = event.target.value.getUint16(0);
 }
 
 function changeColor() {
@@ -51,6 +57,14 @@ document.querySelector('#timerSelect').addEventListener('change', event => {
     console.error('Argh!', error);
   })
 });
+
+document.querySelector('#timerSlider').addEventListener('change', event => {
+  playbulbCandle.setSleepTimer(event.target.value)
+  .catch(error => {
+    console.error('Argh!', error);
+  })
+});
+
 
 document.querySelector('#deviceName').addEventListener('input', event => {
   playbulbCandle.setDeviceName(event.target.value)

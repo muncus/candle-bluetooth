@@ -49,12 +49,8 @@
       </div>
       <div class="subsection" id="timer">
         <span>Timer:</span>
-        <select id="timerSelect">
-          <option value="0">Off</option>
-          <option value="300">5m</option>
-          <option value="600">10m</option>
-          <option value="1200">20m</option>
-        </select>
+        <input id="timerSlider" class="mdl-slider mdl-js-slider" type="range"
+          min="0" max="100" value="0">
       </div>
       <div id="batteryLevel"></div>
     </div>
